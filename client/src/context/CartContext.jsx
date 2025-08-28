@@ -116,7 +116,7 @@ export const CartProvider = ({ children }) => {
       if (isLoaded && user) {
         try {
           dispatch({ type: 'SET_LOADING', payload: true });
-          const response = await fetch(`http://localhost:5000/api/cart/${user.id}`);
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/cart/${user.id}`);
           
           if (response.ok) {
             const cartData = await response.json();
@@ -154,17 +154,29 @@ export const CartProvider = ({ children }) => {
     const syncCartToBackend = async () => {
       if (user && !state.isLoading) {
         try {
-          await fetch(`http://localhost:5000/api/cart/${user.id}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              items: state.items,
-              totalItems: state.totalItems,
-              totalAmount: state.totalAmount,
-            }),
-          });
+          // First check if cart exists
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/cart/${user.id}`);
+          
+          if (!response.ok) {
+            // If cart doesn't exist, sync all items individually
+            for (const item of state.items) {
+              await fetch(`${import.meta.env.VITE_API_URL}/api/cart/${user.id}`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  id: item.id,
+                  name: item.name,
+                  price: item.price,
+                  quantity: item.quantity,
+                  image: item.image,
+                  restaurantId: item.restaurantId,
+                  restaurantName: item.restaurantName
+                }),
+              });
+            }
+          }
         } catch (error) {
           console.error('Error syncing cart to backend:', error);
         }
@@ -174,7 +186,7 @@ export const CartProvider = ({ children }) => {
     if (!state.isLoading) {
       syncCartToBackend();
     }
-  }, [state.items, state.totalItems, state.totalAmount, user, state.isLoading]);
+  }, [state.items, user, state.isLoading]);
 
   // Save to localStorage when user is not logged in
   useEffect(() => {
@@ -188,11 +200,52 @@ export const CartProvider = ({ children }) => {
   }, [state.items, state.totalItems, state.totalAmount, user, state.isLoading]);
 
   const addItem = async (item) => {
-    dispatch({ type: 'ADD_ITEM', payload: item });
-    toast.success(`${item.name} added to cart successfully!`, {
-      duration: 3000,
-      position: 'top-right',
-    });
+    if (user) {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/cart/${user.id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            image: item.image,
+            restaurantId: item.restaurantId,
+            restaurantName: item.restaurantName
+          }),
+        });
+
+        if (response.ok) {
+          dispatch({ type: 'ADD_ITEM', payload: item });
+          toast.success(`${item.name} added to cart successfully!`, {
+            duration: 3000,
+            position: 'top-right',
+          });
+        } else {
+          const errorData = await response.json();
+          toast.error(errorData.message || 'Failed to add item to cart', {
+            duration: 3000,
+            position: 'top-right',
+          });
+        }
+      } catch (error) {
+        console.error('Error adding item to cart:', error);
+        toast.error('Failed to add item to cart', {
+          duration: 3000,
+          position: 'top-right',
+        });
+      }
+    } else {
+      // If user is not logged in, just update local state
+      dispatch({ type: 'ADD_ITEM', payload: item });
+      toast.success(`${item.name} added to cart successfully!`, {
+        duration: 3000,
+        position: 'top-right',
+      });
+    }
   };
 
   const updateQuantity = async (id, quantity) => {
@@ -206,7 +259,7 @@ export const CartProvider = ({ children }) => {
   const clearCart = async () => {
     if (user) {
       try {
-        await fetch(`http://localhost:5000/api/cart/${user.id}`, {
+        await fetch(`${import.meta.env.VITE_API_URL}/api/cart/${user.id}`, {
           method: 'DELETE',
         });
       } catch (error) {
