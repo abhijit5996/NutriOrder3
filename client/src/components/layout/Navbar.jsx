@@ -5,13 +5,16 @@ import {
   SignInButton, 
   SignUpButton, 
   UserButton, 
-  useUser 
+  useUser,
+  useClerk
 } from '@clerk/clerk-react';
 
 const Navbar = ({ cartItems = [] }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const location = useLocation();
-  const { isSignedIn } = useUser();
+  const { isSignedIn, user } = useUser();
+  const { signOut, openUserProfile } = useClerk();
   
   const menuItems = [
     { name: 'Home', path: '/' },
@@ -21,6 +24,16 @@ const Navbar = ({ cartItems = [] }) => {
   ];
   
   const isActive = (path) => location.pathname === path;
+  
+  const handleSignOut = () => {
+    signOut();
+    setIsProfileDropdownOpen(false);
+  };
+
+  const handleManageAccount = () => {
+    openUserProfile();
+    setIsProfileDropdownOpen(false);
+  };
   
   return (
     <motion.nav 
@@ -101,15 +114,61 @@ const Navbar = ({ cartItems = [] }) => {
             
             {isSignedIn ? (
               <div className="flex items-center space-x-3">
-                {/* Clerk User Button */}
-                <UserButton 
-                  appearance={{
-                    elements: {
-                      avatarBox: "w-8 h-8 border-2 border-primary",
-                    }
-                  }}
-                  afterSignOutUrl="/"
-                />
+                {/* Custom Profile Dropdown */}
+                <div className="relative">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                    className="flex items-center justify-center w-8 h-8 rounded-full border-2 border-primary overflow-hidden"
+                  >
+                    <img 
+                      src={user.imageUrl} 
+                      alt="Profile" 
+                      className="w-full h-full object-cover"
+                    />
+                  </motion.button>
+                  
+                  <AnimatePresence>
+                    {isProfileDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute right-0 mt-2 w-48 bg-[#1A1D25] border border-gray-700 rounded-md shadow-lg py-1 z-50"
+                        onMouseLeave={() => setIsProfileDropdownOpen(false)}
+                      >
+                        <Link
+                          to="/profile"
+                          className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white"
+                          onClick={() => setIsProfileDropdownOpen(false)}
+                        >
+                          Profile
+                        </Link>
+                        
+                        <div className="border-t border-gray-700 my-1"></div>
+                        <button
+                          onClick={handleManageAccount}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white"
+                        >
+                          Manage Account
+                        </button>
+                        <button
+                          onClick={handleSignOut}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white"
+                        >
+                          Sign Out
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+                
+                {/* Hidden Clerk UserButton for functionality */}
+                <div className="hidden">
+                  <UserButton afterSignOutUrl="/" />
+                </div>
               </div>
             ) : (
               <div className="flex items-center space-x-2">
@@ -122,15 +181,6 @@ const Navbar = ({ cartItems = [] }) => {
                     Login
                   </motion.button>
                 </SignInButton>
-                {/* <SignUpButton mode="modal">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="btn btn-primary text-sm px-4 py-1.5"
-                  >
-                    Sign Up
-                  </motion.button>
-                </SignUpButton> */}
               </div>
             )}
           </div>
@@ -179,6 +229,26 @@ const Navbar = ({ cartItems = [] }) => {
                     {item.name}
                   </Link>
                 ))}
+                
+                {isSignedIn && (
+                  <>
+                    <Link 
+                      to="/profile"
+                      className="px-4 py-2.5 text-gray-300 hover:text-primary hover:bg-gray-700 transition-colors duration-200"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Profile
+                    </Link>
+                  
+                    <button
+                      onClick={handleManageAccount}
+                      className="px-4 py-2.5 text-left text-gray-300 hover:text-primary hover:bg-gray-700 transition-colors duration-200"
+                    >
+                      Manage Account
+                    </button>
+                  </>
+                )}
+                
                 <div className="flex items-center justify-between px-4 pt-3 pb-2 border-t border-gray-700 mt-2">
                   <Link to="/cart" className="relative p-2" onClick={() => setIsMenuOpen(false)}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -192,15 +262,13 @@ const Navbar = ({ cartItems = [] }) => {
                   </Link>
                   
                   {isSignedIn ? (
-                    <div className="flex items-center space-x-2">
-                      <UserButton 
-                        appearance={{
-                          elements: {
-                            avatarBox: "w-8 h-8 border-2 border-primary",
-                          }
-                        }}
-                        afterSignOutUrl="/"
-                      />
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={handleSignOut}
+                        className="btn btn-outline text-sm px-3 py-1.5"
+                      >
+                        Sign Out
+                      </button>
                     </div>
                   ) : (
                     <div className="flex space-x-2">

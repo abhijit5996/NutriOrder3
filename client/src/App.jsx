@@ -15,6 +15,7 @@ import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
 import ProfilePage from './pages/ProfilePage';
+import OrderHistoryPage from './pages/OrderHistoryPage'; // Add this import
 import PreferencesForm from './components/ui/PreferencesForm';
 
 // Context Providers
@@ -67,6 +68,19 @@ function App() {
                 <>
                   <SignedIn>
                     <ProfilePage />
+                  </SignedIn>
+                  <SignedOut>
+                    <RedirectToSignIn />
+                  </SignedOut>
+                </>
+              } 
+            />
+            <Route 
+              path="order-history"  // Add this route
+              element={
+                <>
+                  <SignedIn>
+                    <OrderHistoryPage />
                   </SignedIn>
                   <SignedOut>
                     <RedirectToSignIn />
