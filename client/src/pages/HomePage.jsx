@@ -1,31 +1,27 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useUser } from '@clerk/clerk-react'; // Import useUser from Clerk
+import { useUser } from '@clerk/clerk-react';
 import { useCart } from '../context/CartContext';
 import FoodCard from '../components/ui/FoodCard';
 import RestaurantCard from '../components/ui/RestaurantCard';
 import { motion } from 'framer-motion';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const HomePage = () => {
-  const { user } = useUser(); // Get user from Clerk
-  // For preferences, you'll need to handle this separately since Clerk doesn't store custom preferences
-  // You might need to keep your preferences context or use a different approach
-  const preferences = null; // Placeholder - you'll need to implement this
+  const { user } = useUser();
+  const preferences = null;
   
   const { addItem } = useCart();
   
-  // Sample data - in a real app, this would come from an API
   const [featuredFoods, setFeaturedFoods] = useState([]);
   const [recommendedRestaurants, setRecommendedRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    // Simulate API call to get featured foods and recommended restaurants
     const fetchData = async () => {
       setLoading(true);
       
-      // Expanded sample data
+      // Sample data
       const sampleFoods = [
         {
           id: 1,
@@ -100,28 +96,28 @@ const HomePage = () => {
           restaurantId: 4,
         },
         {
-            id: 7,
-            name: 'Sushi Platter',
-            description: 'Assortment of fresh sushi rolls including salmon, tuna, and avocado.',
-            price: 550,
-            image: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-            rating: 4.7,
-            reviewCount: 195,
-            isHealthy: true,
-            restaurant: 'Tokyo Bites',
-            restaurantId: 6,
+          id: 7,
+          name: 'Sushi Platter',
+          description: 'Assortment of fresh sushi rolls including salmon, tuna, and avocado.',
+          price: 550,
+          image: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
+          rating: 4.7,
+          reviewCount: 195,
+          isHealthy: true,
+          restaurant: 'Tokyo Bites',
+          restaurantId: 6,
         },
         {
-            id: 8,
-            name: 'Chilli Chicken',
-            description: 'Spicy and tangy chicken stir-fried with bell peppers and onions.',
-            price: 290,
-            image: 'https://images.unsplash.com/photo-1599494102234-28a3f4e2427e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-            rating: 4.4,
-            reviewCount: 178,
-            isHealthy: false,
-            restaurant: 'Wok Hei',
-            restaurantId: 7,
+          id: 8,
+          name: 'Chilli Chicken',
+          description: 'Spicy and tangy chicken stir-fried with bell peppers and onions.',
+          price: 290,
+          image: 'https://images.unsplash.com/photo-1599494102234-28a3f4e2427e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
+          rating: 4.4,
+          reviewCount: 178,
+          isHealthy: false,
+          restaurant: 'Wok Hei',
+          restaurantId: 7,
         }
       ];
       
@@ -187,28 +183,28 @@ const HomePage = () => {
           distance: 5.5,
         },
         {
-            id: 6,
-            name: 'Tokyo Bites',
-            image: 'https://images.unsplash.com/photo-1553621042-f6e147245754?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-            rating: 4.7,
-            reviewCount: 310,
-            location: 'Saket, New Delhi',
-            cuisines: ['Japanese', 'Sushi', 'Asian'],
-            isHealthFocused: true,
-            deliveryTime: 35,
-            distance: 4.1,
+          id: 6,
+          name: 'Tokyo Bites',
+          image: 'https://images.unsplash.com/photo-1553621042-f6e147245754?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
+          rating: 4.7,
+          reviewCount: 310,
+          location: 'Saket, New Delhi',
+          cuisines: ['Japanese', 'Sushi', 'Asian'],
+          isHealthFocused: true,
+          deliveryTime: 35,
+          distance: 4.1,
         },
         {
-            id: 7,
-            name: 'Wok Hei',
-            image: 'https://images.unsplash.com/photo-1585518419759-7fe2e0fbf8a6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-            rating: 4.4,
-            reviewCount: 280,
-            location: 'Cyber Hub, Gurugram',
-            cuisines: ['Chinese', 'Thai', 'Asian'],
-            isHealthFocused: false,
-            deliveryTime: 30,
-            distance: 6.2,
+          id: 7,
+          name: 'Wok Hei',
+          image: 'https://images.unsplash.com/photo-1585518419759-7fe2e0fbf8a6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
+          rating: 4.4,
+          reviewCount: 280,
+          location: 'Cyber Hub, Gurugram',
+          cuisines: ['Chinese', 'Thai', 'Asian'],
+          isHealthFocused: false,
+          deliveryTime: 30,
+          distance: 6.2,
         }
       ];
       
@@ -246,13 +242,11 @@ const HomePage = () => {
     fetchData();
   }, [preferences]);
   
-  // Updated function to show a toast notification
   const handleAddToCart = (item) => {
     addItem(item);
     toast.success(`${item.name} added to the cart successfully!`);
   };
   
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -274,8 +268,8 @@ const HomePage = () => {
   return (
     <div className="py-8">
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 z-0"></div>
+      <section className="relative py-20 overflow-hidden bg-gradient-to-br from-[#0F172A] to-[#1E293B]">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#38BDF8]/20 to-[#F43F5E]/20 z-0"></div>
         <div className="container-custom relative z-10">
           <motion.div 
             className="max-w-2xl"
@@ -283,10 +277,10 @@ const HomePage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
-              Personalized Food Ordering for Your <span className="text-gradient">Health & Taste</span>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-[#F1F5F9]">
+              Personalized Food Ordering for Your <span className="bg-gradient-to-r from-[#38BDF8] to-[#F43F5E] bg-clip-text text-transparent">Health & Taste</span>
             </h1>
-            <p className="text-xl mb-8 text-gray-300">Order food that matches your preferences and dietary needs from the best restaurants.</p>
+            <p className="text-xl mb-8 text-[#94A3B8]">Order food that matches your preferences and dietary needs from the best restaurants.</p>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
               <Link to="/restaurants" className="btn btn-primary px-6 py-3 text-lg font-semibold">
                 Browse Restaurants
@@ -309,18 +303,18 @@ const HomePage = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-2xl md:text-3xl font-bold text-white"
+              className="text-2xl md:text-3xl font-bold text-[#F1F5F9]"
             >
               {preferences ? 'Recommended for You' : 'Featured Foods'}
             </motion.h2>
-            <Link to="/foods" className="text-primary hover:text-primary/80 font-medium">
+            <Link to="/foods" className="text-[#38BDF8] hover:text-[#38BDF8]/80 font-medium">
               View All
             </Link>
           </div>
           
           {loading ? (
             <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#38BDF8]"></div>
             </div>
           ) : (
             <motion.div 
@@ -344,15 +338,15 @@ const HomePage = () => {
       </section>
       
       {/* How It Works Section */}
-      <section className="section-padding bg-[#1A1D25]">
+      <section className="section-padding bg-[#1E293B]">
         <div className="container-custom">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-2xl md:text-3xl font-bold text-white text-center mb-12"
+            className="text-2xl md:text-3xl font-bold text-[#F1F5F9] text-center mb-12"
           >
-            How NutriOrder Works
+            How ZestyLife Works
           </motion.h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -363,11 +357,11 @@ const HomePage = () => {
               transition={{ delay: 0.1 }}
               className="card p-6 text-center"
             >
-              <div className="bg-primary/20 h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-primary text-2xl font-bold">1</span>
+              <div className="bg-[#38BDF8]/20 h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-[#38BDF8] text-2xl font-bold">1</span>
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Share Your Preferences</h3>
-              <p className="text-gray-400">
+              <h3 className="text-xl font-semibold text-[#F1F5F9] mb-2">Share Your Preferences</h3>
+              <p className="text-[#94A3B8]">
                 Tell us about your dietary needs, health conditions, and food preferences during registration.
               </p>
             </motion.div>
@@ -379,11 +373,11 @@ const HomePage = () => {
               transition={{ delay: 0.2 }}
               className="card p-6 text-center"
             >
-              <div className="bg-primary/20 h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-primary text-2xl font-bold">2</span>
+              <div className="bg-[#38BDF8]/20 h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-[#38BDF8] text-2xl font-bold">2</span>
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Get Personalized Recommendations</h3>
-              <p className="text-gray-400">
+              <h3 className="text-xl font-semibold text-[#F1F5F9] mb-2">Get Personalized Recommendations</h3>
+              <p className="text-[#94A3B8]">
                 We'll suggest foods and restaurants that match your unique preferences and dietary requirements.
               </p>
             </motion.div>
@@ -395,11 +389,11 @@ const HomePage = () => {
               transition={{ delay: 0.3 }}
               className="card p-6 text-center"
             >
-              <div className="bg-primary/20 h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-primary text-2xl font-bold">3</span>
+              <div className="bg-[#38BDF8]/20 h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-[#38BDF8] text-2xl font-bold">3</span>
               </div>
-              <h3 className="text-xl font-semibold text-white mb-2">Order or Cook at Home</h3>
-              <p className="text-gray-400">
+              <h3 className="text-xl font-semibold text-[#F1F5F9] mb-2">Order or Cook at Home</h3>
+              <p className="text-[#94A3B8]">
                 Order from our partner restaurants or access recipes to prepare healthy meals at home.
               </p>
             </motion.div>
@@ -415,18 +409,18 @@ const HomePage = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-2xl md:text-3xl font-bold text-white"
+              className="text-2xl md:text-3xl font-bold text-[#F1F5F9]"
             >
               {preferences ? 'Restaurants for You' : 'Popular Restaurants'}
             </motion.h2>
-            <Link to="/restaurants" className="text-primary hover:text-primary/80 font-medium">
+            <Link to="/restaurants" className="text-[#38BDF8] hover:text-[#38BDF8]/80 font-medium">
               View All
             </Link>
           </div>
           
           {loading ? (
             <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#38BDF8]"></div>
             </div>
           ) : (
             <motion.div 
@@ -447,7 +441,7 @@ const HomePage = () => {
       </section>
       
       {/* CTA Section */}
-      <section className="section-padding bg-gradient-to-r from-primary to-secondary">
+      <section className="section-padding bg-gradient-to-r from-[#38BDF8] to-[#F43F5E]">
         <div className="container-custom text-center">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
@@ -464,7 +458,7 @@ const HomePage = () => {
             transition={{ delay: 0.1 }}
             className="text-xl mb-8 max-w-2xl mx-auto text-white/90"
           >
-            Join NutriOrder today and discover food that's not just delicious but also good for your health.
+            Join ZestyLife today and discover food that's not just delicious but also good for your health.
           </motion.p>
           {!user ? (
             <motion.div 
@@ -474,10 +468,10 @@ const HomePage = () => {
               transition={{ delay: 0.2 }}
               className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4"
             >
-              <Link to="/register" className="btn bg-white text-primary hover:bg-gray-100 px-6 py-3 text-lg font-semibold">
+              <Link to="/register" className="btn bg-white text-[#38BDF8] hover:bg-gray-100 px-6 py-3 text-lg font-semibold">
                 Sign Up Now
               </Link>
-              <Link to="/login" className="btn bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary px-6 py-3 text-lg font-semibold">
+              <Link to="/login" className="btn bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#38BDF8] px-6 py-3 text-lg font-semibold">
                 Login
               </Link>
             </motion.div>
@@ -488,7 +482,7 @@ const HomePage = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              <Link to="/preferences" className="btn bg-white text-primary hover:bg-gray-100 px-6 py-3 text-lg font-semibold">
+              <Link to="/preferences" className="btn bg-white text-[#38BDF8] hover:bg-gray-100 px-6 py-3 text-lg font-semibold">
                 Update Your Preferences
               </Link>
             </motion.div>
