@@ -93,16 +93,16 @@ const FoodCard = ({ food }) => {
         </div>
         
         <div className="flex mt-4 space-x-2">
-  <button 
-    className="btn btn-primary btn-food-card"
-    onClick={() => onAddToCart(food)}
-  >
-    Add to Cart
-  </button>
-  <button className="btn btn-outline btn-food-card">
-    View Recipe
-  </button>
-</div>
+          <button 
+            className="btn btn-primary btn-food-card"
+            onClick={handleAddToCart}
+          >
+            Add to Cart
+          </button>
+          <button className="btn btn-outline btn-food-card">
+            View Recipe
+          </button>
+        </div>
       </div>
     </motion.div>
   );
