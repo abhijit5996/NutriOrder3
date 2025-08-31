@@ -92,23 +92,17 @@ const FoodCard = ({ food }) => {
           </div>
         </div>
         
-        <div className="flex items-center justify-between gap-2">
-          <motion.button 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleAddToCart}
-            className="btn btn-primary flex-1"
-          >
-            Add to Cart
-          </motion.button>
-          
-          <Link 
-            to={`/recipe/${food.id}`}
-            className="btn btn-secondary flex-1"
-          >
-            View Recipe
-          </Link>
-        </div>
+        <div className="flex mt-4 space-x-2">
+  <button 
+    className="btn btn-primary btn-food-card"
+    onClick={() => onAddToCart(food)}
+  >
+    Add to Cart
+  </button>
+  <button className="btn btn-outline btn-food-card">
+    View Recipe
+  </button>
+</div>
       </div>
     </motion.div>
   );
