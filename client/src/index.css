@@ -92,13 +92,15 @@
     color: white;
   }
   
-  /* Specific styles for food card buttons */
+  /* Specific styles for food card buttons - UPDATED */
   .btn-food-card {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
-    min-height: 2rem;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    min-height: 2.75rem;
+    min-width: 8rem;
     flex: 1;
-    margin: 0 0.25rem;
+    text-align: center;
+    box-sizing: border-box;
   }
   
   .container-custom {
@@ -259,6 +261,13 @@ input:focus-visible {
   .container-custom {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+  
+  /* Adjust button size for mobile */
+  .btn-food-card {
+    min-width: 7rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
   }
 }
 /* Mobile filter animation */

@@ -7,6 +7,38 @@ import RestaurantCard from '../components/ui/RestaurantCard';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 
+// Import all food images
+import BajraKhichdi from '../assets/images/Bajra-Khichdi.jpg';
+import BesanChilla from '../assets/images/besan-chilla.jpg';
+import ChannaSaag from '../assets/images/Channa-Saag.jpg';
+import DahiKeKebab from '../assets/images/Dahi_Ke_Kebab.jpg';
+import DalKhichdi from '../assets/images/Dal-Khichdi.jpg';
+import EggCurry from '../assets/images/egg-curry.jpg';
+import GrilledPaneerTikka from '../assets/images/grilled paneer tikka.jpg';
+import GujaratiMethiThepla from '../assets/images/Gujarati-Methi-Thepla.jpg';
+import IdliSambar from '../assets/images/Idli-and-Sambar.jpg';
+import KadaiPaneer from '../assets/images/Kadai-Paneer.jpg';
+import KetoButterChicken from '../assets/images/keto-butter-chicken.jpg';
+import KhamanDhokla from '../assets/images/khaman-dhokla.jpg';
+import Kheer from '../assets/images/Kheer.jpg';
+import LaukiChanaDal from '../assets/images/lauki-chana-dal.jpg';
+import MasalaChai from '../assets/images/Masala-Chai.jpg';
+import MasalaOats from '../assets/images/masala-oats-recipe.jpg';
+import MiletKhichdi from '../assets/images/milet-khichdi.jpg';
+import MoongDalHalwa from '../assets/images/moong-dal-halwa.jpg';
+import MutterMushroom from '../assets/images/mutter-mushroom.jpg';
+import NutrelaSoyChunkCurry from '../assets/images/Nutrela-soy-chunk-curry.jpg';
+import QuinoaUpma from '../assets/images/quinoa-upma.jpg';
+import RajmaChawal from '../assets/images/Rajma-chawal.jpg';
+import SaagPaneer from '../assets/images/Saag-Paneer-1.jpg';
+import SproutedMoongSalad from '../assets/images/Sprouted-moong-salad.jpg';
+import SproutedRagiDosa from '../assets/images/Sprouted-Ragi-Dosa_.jpg';
+import SweetPotatoChaat from '../assets/images/sweet-potato-chaat.jpg';
+import TandooriChickenSalad from '../assets/images/Tandoori-chicken-salad.jpg';
+import TandooriFishTikka from '../assets/images/Tandoori-Fish-tikka.jpg';
+import VegPulao from '../assets/images/veg-pulao.jpg';
+import VegThali from '../assets/images/veg-thali.jpg';
+
 const HomePage = () => {
   const { user } = useUser();
   const preferences = null;
@@ -21,110 +53,374 @@ const HomePage = () => {
     const fetchData = async () => {
       setLoading(true);
       
-      // Sample data
-      const sampleFoods = [
+      // Food items with local images
+      const foodItems = [
         {
           id: 1,
-          name: 'Paneer Butter Masala',
-          description: 'Creamy and rich paneer curry with tomatoes, butter, and spices.',
-          price: 250,
-          image: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-          rating: 4.5,
-          reviewCount: 128,
+          name: 'Bajra Khichdi',
+          description: 'Healthy millet-based khichdi with vegetables and spices.',
+          price: 180,
+          image: BajraKhichdi,
+          rating: 4.3,
+          reviewCount: 89,
           isHealthy: true,
-          restaurant: 'Spice Garden',
+          restaurant: 'Healthy Bites',
           restaurantId: 1,
         },
         {
           id: 2,
-          name: 'Masala Dosa',
-          description: 'Crispy rice crepe with spiced potato filling, served with sambar.',
-          price: 150,
-          image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-          rating: 4.7,
-          reviewCount: 156,
+          name: 'Besan Chilla',
+          description: 'Savory gram flour pancakes with herbs and spices.',
+          price: 120,
+          image: BesanChilla,
+          rating: 4.5,
+          reviewCount: 112,
           isHealthy: true,
-          restaurant: 'South Indian Delights',
+          restaurant: 'Breakfast Corner',
           restaurantId: 2,
         },
         {
           id: 3,
-          name: 'Chicken Biryani',
-          description: 'Fragrant basmati rice with tender chicken and aromatic spices.',
-          price: 280,
-          image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-          rating: 4.6,
-          reviewCount: 210,
-          isHealthy: false,
-          restaurant: 'Biryani House',
+          name: 'Channa Saag',
+          description: 'Chickpeas cooked with spinach and traditional spices.',
+          price: 190,
+          image: ChannaSaag,
+          rating: 4.4,
+          reviewCount: 95,
+          isHealthy: true,
+          restaurant: 'North Indian Delights',
           restaurantId: 3,
         },
         {
           id: 4,
-          name: 'Vegetable Salad Bowl',
-          description: 'Fresh mixed vegetables with a light dressing, for the health-conscious.',
-          price: 180,
-          image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-          rating: 4.3,
-          reviewCount: 89,
-          isHealthy: true,
-          restaurant: 'Green Plate',
+          name: 'Dahi Ke Kebab',
+          description: 'Yogurt-based kebabs with a crispy exterior and soft interior.',
+          price: 220,
+          image: DahiKeKebab,
+          rating: 4.7,
+          reviewCount: 134,
+          isHealthy: false,
+          restaurant: 'Royal Cuisine',
           restaurantId: 4,
         },
         {
           id: 5,
-          name: 'Margherita Pizza',
-          description: 'Classic pizza with fresh mozzarella, tomatoes, and basil.',
-          price: 350,
-          image: 'https://images.unsplash.com/photo-1594007654729-407eedc4be65?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-          rating: 4.8,
-          reviewCount: 340,
-          isHealthy: false,
-          restaurant: 'Italiano Pizza',
+          name: 'Dal Khichdi',
+          description: 'Comforting lentil and rice porridge with ghee and spices.',
+          price: 150,
+          image: DalKhichdi,
+          rating: 4.6,
+          reviewCount: 178,
+          isHealthy: true,
+          restaurant: 'Comfort Foods',
           restaurantId: 5,
         },
         {
           id: 6,
-          name: 'Quinoa Salad',
-          description: 'Healthy and nutritious salad with quinoa, veggies, and lemon dressing.',
-          price: 220,
-          image: 'https://images.unsplash.com/photo-1551248429-40974aa41727?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-          rating: 4.9,
-          reviewCount: 150,
-          isHealthy: true,
-          restaurant: 'Green Plate',
-          restaurantId: 4,
-        },
-        {
-          id: 7,
-          name: 'Sushi Platter',
-          description: 'Assortment of fresh sushi rolls including salmon, tuna, and avocado.',
-          price: 550,
-          image: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-          rating: 4.7,
-          reviewCount: 195,
-          isHealthy: true,
-          restaurant: 'Tokyo Bites',
+          name: 'Egg Curry',
+          description: 'Hard-boiled eggs in a rich and spicy gravy.',
+          price: 200,
+          image: EggCurry,
+          rating: 4.5,
+          reviewCount: 156,
+          isHealthy: false,
+          restaurant: 'Spice Route',
           restaurantId: 6,
         },
         {
-          id: 8,
-          name: 'Chilli Chicken',
-          description: 'Spicy and tangy chicken stir-fried with bell peppers and onions.',
-          price: 290,
-          image: 'https://images.unsplash.com/photo-1599494102234-28a3f4e2427e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-          rating: 4.4,
-          reviewCount: 178,
-          isHealthy: false,
-          restaurant: 'Wok Hei',
+          id: 7,
+          name: 'Grilled Paneer Tikka',
+          description: 'Marinated cottage cheese grilled to perfection.',
+          price: 240,
+          image: GrilledPaneerTikka,
+          rating: 4.8,
+          reviewCount: 210,
+          isHealthy: true,
+          restaurant: 'Tandoori Specials',
           restaurantId: 7,
+        },
+        {
+          id: 8,
+          name: 'Gujarati Methi Thepla',
+          description: 'Fenugreek-flavored flatbread from Gujarat.',
+          price: 110,
+          image: GujaratiMethiThepla,
+          rating: 4.4,
+          reviewCount: 98,
+          isHealthy: true,
+          restaurant: 'Gujarati Thali',
+          restaurantId: 8,
+        },
+        {
+          id: 9,
+          name: 'Idli and Sambar',
+          description: 'Steamed rice cakes served with lentil stew and chutney.',
+          price: 130,
+          image: IdliSambar,
+          rating: 4.7,
+          reviewCount: 245,
+          isHealthy: true,
+          restaurant: 'South Indian Delights',
+          restaurantId: 9,
+        },
+        {
+          id: 10,
+          name: 'Kadai Paneer',
+          description: 'Spicy cottage cheese curry with capsicum and onions.',
+          price: 250,
+          image: KadaiPaneer,
+          rating: 4.8,
+          reviewCount: 312,
+          isHealthy: false,
+          restaurant: 'North Indian Delights',
+          restaurantId: 3,
+        },
+        {
+          id: 11,
+          name: 'Keto Butter Chicken',
+          description: 'Low-carb version of the classic butter chicken.',
+          price: 280,
+          image: KetoButterChicken,
+          rating: 4.6,
+          reviewCount: 145,
+          isHealthy: true,
+          restaurant: 'Keto Kitchen',
+          restaurantId: 10,
+        },
+        {
+          id: 12,
+          name: 'Khaman Dhokla',
+          description: 'Steamed savory chickpea flour cakes from Gujarat.',
+          price: 120,
+          image: KhamanDhokla,
+          rating: 4.5,
+          reviewCount: 187,
+          isHealthy: true,
+          restaurant: 'Gujarati Thali',
+          restaurantId: 8,
+        },
+        {
+          id: 13,
+          name: 'Kheer',
+          description: 'Traditional rice pudding with nuts and cardamom.',
+          price: 140,
+          image: Kheer,
+          rating: 4.9,
+          reviewCount: 276,
+          isHealthy: false,
+          restaurant: 'Sweet Tooth',
+          restaurantId: 11,
+        },
+        {
+          id: 14,
+          name: 'Lauki Chana Dal',
+          description: 'Bottle gourd cooked with split chickpeas and spices.',
+          price: 160,
+          image: LaukiChanaDal,
+          rating: 4.3,
+          reviewCount: 92,
+          isHealthy: true,
+          restaurant: 'Healthy Bites',
+          restaurantId: 1,
+        },
+        {
+          id: 15,
+          name: 'Masala Chai',
+          description: 'Spiced Indian tea with milk and aromatic spices.',
+          price: 60,
+          image: MasalaChai,
+          rating: 4.8,
+          reviewCount: 345,
+          isHealthy: false,
+          restaurant: 'Chai Point',
+          restaurantId: 12,
+        },
+        {
+          id: 16,
+          name: 'Masala Oats',
+          description: 'Spiced oats with vegetables and herbs.',
+          price: 130,
+          image: MasalaOats,
+          rating: 4.4,
+          reviewCount: 118,
+          isHealthy: true,
+          restaurant: 'Healthy Bites',
+          restaurantId: 1,
+        },
+        {
+          id: 17,
+          name: 'Milet Khichdi',
+          description: 'Nutritious millet khichdi with vegetables.',
+          price: 170,
+          image: MiletKhichdi,
+          rating: 4.5,
+          reviewCount: 104,
+          isHealthy: true,
+          restaurant: 'Healthy Bites',
+          restaurantId: 1,
+        },
+        {
+          id: 18,
+          name: 'Moong Dal Halwa',
+          description: 'Sweet lentil pudding with ghee and nuts.',
+          price: 180,
+          image: MoongDalHalwa,
+          rating: 4.7,
+          reviewCount: 198,
+          isHealthy: false,
+          restaurant: 'Sweet Tooth',
+          restaurantId: 11,
+        },
+        {
+          id: 19,
+          name: 'Mutter Mushroom',
+          description: 'Peas and mushrooms in a creamy tomato gravy.',
+          price: 220,
+          image: MutterMushroom,
+          rating: 4.6,
+          reviewCount: 156,
+          isHealthy: true,
+          restaurant: 'Vegetarian Delight',
+          restaurantId: 13,
+        },
+        {
+          id: 20,
+          name: 'Nutrela Soy Chunk Curry',
+          description: 'Protein-rich soy chunks in a spicy curry.',
+          price: 190,
+          image: NutrelaSoyChunkCurry,
+          rating: 4.3,
+          reviewCount: 87,
+          isHealthy: true,
+          restaurant: 'Protein Hub',
+          restaurantId: 14,
+        },
+        {
+          id: 21,
+          name: 'Quinoa Upma',
+          description: 'Healthy quinoa preparation with vegetables and spices.',
+          price: 200,
+          image: QuinoaUpma,
+          rating: 4.5,
+          reviewCount: 112,
+          isHealthy: true,
+          restaurant: 'Healthy Bites',
+          restaurantId: 1,
+        },
+        {
+          id: 22,
+          name: 'Rajma Chawal',
+          description: 'Kidney bean curry served with steamed rice.',
+          price: 180,
+          image: RajmaChawal,
+          rating: 4.8,
+          reviewCount: 267,
+          isHealthy: true,
+          restaurant: 'North Indian Delights',
+          restaurantId: 3,
+        },
+        {
+          id: 23,
+          name: 'Saag Paneer',
+          description: 'Spinach curry with cottage cheese cubes.',
+          price: 230,
+          image: SaagPaneer,
+          rating: 4.7,
+          reviewCount: 201,
+          isHealthy: true,
+          restaurant: 'North Indian Delights',
+          restaurantId: 3,
+        },
+        {
+          id: 24,
+          name: 'Sprouted Moong Salad',
+          description: 'Healthy salad with sprouted mung beans and vegetables.',
+          price: 150,
+          image: SproutedMoongSalad,
+          rating: 4.6,
+          reviewCount: 134,
+          isHealthy: true,
+          restaurant: 'Salad Bar',
+          restaurantId: 15,
+        },
+        {
+          id: 25,
+          name: 'Sprouted Ragi Dosa',
+          description: 'Fermented crepe made with sprouted ragi flour.',
+          price: 160,
+          image: SproutedRagiDosa,
+          rating: 4.4,
+          reviewCount: 98,
+          isHealthy: true,
+          restaurant: 'South Indian Delights',
+          restaurantId: 9,
+        },
+        {
+          id: 26,
+          name: 'Sweet Potato Chaat',
+          description: 'Spicy and tangy sweet potato street food.',
+          price: 140,
+          image: SweetPotatoChaat,
+          rating: 4.5,
+          reviewCount: 123,
+          isHealthy: true,
+          restaurant: 'Street Food Corner',
+          restaurantId: 16,
+        },
+        {
+          id: 27,
+          name: 'Tandoori Chicken Salad',
+          description: 'Grilled chicken with fresh vegetables and dressing.',
+          price: 260,
+          image: TandooriChickenSalad,
+          rating: 4.6,
+          reviewCount: 178,
+          isHealthy: true,
+          restaurant: 'Salad Bar',
+          restaurantId: 15,
+        },
+        {
+          id: 28,
+          name: 'Tandoori Fish Tikka',
+          description: 'Marinated fish grilled in tandoor.',
+          price: 320,
+          image: TandooriFishTikka,
+          rating: 4.7,
+          reviewCount: 156,
+          isHealthy: true,
+          restaurant: 'Coastal Cuisine',
+          restaurantId: 17,
+        },
+        {
+          id: 29,
+          name: 'Veg Pulao',
+          description: 'Fragrant rice cooked with vegetables and spices.',
+          price: 170,
+          image: VegPulao,
+          rating: 4.5,
+          reviewCount: 189,
+          isHealthy: true,
+          restaurant: 'Rice Bowl',
+          restaurantId: 18,
+        },
+        {
+          id: 30,
+          name: 'Veg Thali',
+          description: 'Complete meal with various dishes, bread, rice, and dessert.',
+          price: 280,
+          image: VegThali,
+          rating: 4.8,
+          reviewCount: 312,
+          isHealthy: true,
+          restaurant: 'Thali House',
+          restaurantId: 19,
         }
       ];
       
       const sampleRestaurants = [
         {
           id: 1,
-          name: 'Spice Garden',
+          name: 'Healthy Bites',
           image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
           rating: 4.5,
           reviewCount: 328,
@@ -136,7 +432,7 @@ const HomePage = () => {
         },
         {
           id: 2,
-          name: 'South Indian Delights',
+          name: 'Breakfast Corner',
           image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
           rating: 4.7,
           reviewCount: 256,
@@ -148,7 +444,7 @@ const HomePage = () => {
         },
         {
           id: 3,
-          name: 'Biryani House',
+          name: 'North Indian Delights',
           image: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
           rating: 4.6,
           reviewCount: 410,
@@ -160,7 +456,7 @@ const HomePage = () => {
         },
         {
           id: 4,
-          name: 'Green Plate',
+          name: 'Royal Cuisine',
           image: 'https://images.unsplash.com/photo-1565299507177-b0ac66763828?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
           rating: 4.3,
           reviewCount: 189,
@@ -172,7 +468,7 @@ const HomePage = () => {
         },
         {
           id: 5,
-          name: 'Italiano Pizza',
+          name: 'Comfort Foods',
           image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
           rating: 4.8,
           reviewCount: 520,
@@ -184,7 +480,7 @@ const HomePage = () => {
         },
         {
           id: 6,
-          name: 'Tokyo Bites',
+          name: 'Spice Route',
           image: 'https://images.unsplash.com/photo-1553621042-f6e147245754?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
           rating: 4.7,
           reviewCount: 310,
@@ -196,7 +492,7 @@ const HomePage = () => {
         },
         {
           id: 7,
-          name: 'Wok Hei',
+          name: 'Tandoori Specials',
           image: 'https://images.unsplash.com/photo-1585518419759-7fe2e0fbf8a6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
           rating: 4.4,
           reviewCount: 280,
@@ -209,7 +505,7 @@ const HomePage = () => {
       ];
       
       if (preferences) {
-        const filteredFoods = sampleFoods.filter(food => {
+        const filteredFoods = foodItems.filter(food => {
           if (preferences.dietaryRestrictions && preferences.dietaryRestrictions.includes('Vegetarian') && food.name.toLowerCase().includes('chicken')) {
             return false;
           }
@@ -232,7 +528,7 @@ const HomePage = () => {
           filteredRestaurants.length > 0 ? filteredRestaurants : sampleRestaurants
         );
       } else {
-        setFeaturedFoods(sampleFoods);
+        setFeaturedFoods(foodItems);
         setRecommendedRestaurants(sampleRestaurants);
       }
       
@@ -322,9 +618,9 @@ const HomePage = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              {featuredFoods.map(food => (
+              {featuredFoods.slice(0, 6).map(food => (
                 <motion.div key={food.id} variants={itemVariants}>
                   <RecipeCard 
                     food={food} 

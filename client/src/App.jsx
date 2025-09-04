@@ -11,6 +11,7 @@ import CartPage from './pages/CartPage';
 import RestaurantsPage from './pages/RestaurantsPage';
 import RestaurantMenuPage from './pages/RestaurantMenuPage';
 import RecipePage from './pages/RecipePage';
+import FoodsPage from './pages/FoodPage';
 import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
@@ -32,6 +33,7 @@ function App() {
             <Route path="restaurants" element={<RestaurantsPage />} />
             <Route path="restaurants/:id" element={<RestaurantMenuPage />} />
             <Route path="recipe/:id" element={<RecipePage />} />
+            <Route path="foods" element={<FoodsPage />} />
             <Route path="contact" element={<ContactPage />} />
             <Route path="about" element={<AboutPage />} />
             

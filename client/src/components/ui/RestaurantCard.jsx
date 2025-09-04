@@ -74,6 +74,7 @@ const RestaurantCard = ({ restaurant }) => {
           ))}
         </div>
         
+        {/* Updated Link to use restaurant ID */}
         <Link 
           to={`/restaurants/${restaurant.id}`}
           className="btn btn-primary w-full"
