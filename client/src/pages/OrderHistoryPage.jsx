@@ -2,40 +2,13 @@ import { useState, useEffect } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 const OrderHistoryPage = () => {
   const { user } = useUser();
-  const [orders, setOrders] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { orders } = useCart();
+  const [isLoading, setIsLoading] = useState(false);
   const [filterStatus, setFilterStatus] = useState('all');
-
-  useEffect(() => {
-    const fetchOrderHistory = async () => {
-      if (user) {
-        try {
-          setIsLoading(true);
-          setError(null);
-          
-          const response = await fetch(`http://localhost:5000/api/orders/${user.id}`);
-          
-          if (response.ok) {
-            const ordersData = await response.json();
-            setOrders(ordersData);
-          } else {
-            throw new Error('Failed to fetch order history');
-          }
-        } catch (err) {
-          console.error('Error fetching order history:', err);
-          setError(err.message);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    fetchOrderHistory();
-  }, [user]);
 
   // Filter orders based on status
   const filteredOrders = filterStatus === 'all' 
@@ -95,30 +68,6 @@ const OrderHistoryPage = () => {
     );
   }
 
-  if (error) {
-    return (
-      <div className="py-12">
-        <div className="container-custom">
-          <div className="max-w-3xl mx-auto card p-8 text-center">
-            <div className="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h2 className="text-2xl font-bold text-white mb-4">Error Loading Orders</h2>
-            <p className="text-gray-300 mb-6">{error}</p>
-            <button 
-              onClick={() => window.location.reload()}
-              className="btn btn-primary"
-            >
-              Try Again
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="py-12">
       <div className="container-custom">
@@ -164,12 +113,12 @@ const OrderHistoryPage = () => {
               className="space-y-6"
             >
               {filteredOrders.map((order) => (
-                <div key={order._id} className="card p-6">
+                <div key={order.id} className="card p-6">
                   <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
                     <div>
-                      <h3 className="font-semibold text-white text-lg">Order #{order.orderNumber}</h3>
+                      <h3 className="font-semibold text-white text-lg">Order #{order.id.slice(-6)}</h3>
                       <p className="text-gray-400 text-sm mt-1">
-                        {formatDate(order.createdAt)}
+                        {formatDate(order.date)}
                       </p>
                     </div>
                     
@@ -198,38 +147,11 @@ const OrderHistoryPage = () => {
                     </div>
                     
                     <div>
-                      <h4 className="text-gray-400 text-sm font-medium mb-2">Delivery Address</h4>
-                      <p className="text-white text-sm">
-                        {order.deliveryInfo.address}
-                      </p>
-                      {order.deliveryInfo.deliveryInstructions && (
-                        <p className="text-gray-400 text-sm mt-1">
-                          Instructions: {order.deliveryInfo.deliveryInstructions}
-                        </p>
-                      )}
-                    </div>
-                    
-                    <div>
-                      <h4 className="text-gray-400 text-sm font-medium mb-2">Payment</h4>
-                      <p className="text-white text-sm capitalize">
-                        {order.paymentMethod === 'cod' ? 'Cash on Delivery' : order.paymentMethod}
-                      </p>
+                      <h4 className="text-gray-400 text-sm font-medium mb-2">Total Amount</h4>
                       <div className="mt-2">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-400">Subtotal:</span>
-                          <span className="text-white">₹{order.totalAmount.toFixed(2)}</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-400">Delivery Fee:</span>
-                          <span className="text-white">₹{order.deliveryFee.toFixed(2)}</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-400">Tax:</span>
-                          <span className="text-white">₹{order.tax.toFixed(2)}</span>
-                        </div>
                         <div className="flex justify-between text-sm font-medium mt-1 pt-1 border-t border-gray-700">
                           <span className="text-white">Total:</span>
-                          <span className="text-white">₹{order.finalAmount.toFixed(2)}</span>
+                          <span className="text-white">₹{order.totalAmount.toFixed(2)}</span>
                         </div>
                       </div>
                     </div>
@@ -237,15 +159,13 @@ const OrderHistoryPage = () => {
                   
                   <div className="flex justify-between items-center pt-4 border-t border-gray-700">
                     <div className="text-sm text-gray-400">
-                      Estimated delivery: {order.status === 'delivered' 
-                        ? `Delivered on ${formatDate(order.updatedAt)}` 
-                        : '30-45 minutes'}
+                      Order placed on {formatDate(order.date)}
                     </div>
                     
                     <button 
                       onClick={() => {
                         // In a real app, this would navigate to order details or show a modal
-                        console.log('View order details:', order._id);
+                        console.log('View order details:', order.id);
                       }}
                       className="text-primary hover:text-primary/80 text-sm font-medium flex items-center"
                     >

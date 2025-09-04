@@ -9,6 +9,7 @@ const initialState = {
   totalItems: 0,
   totalAmount: 0,
   isLoading: true,
+  orders: [], // Add orders to initial state
 };
 
 const cartReducer = (state, action) => {
@@ -99,6 +100,19 @@ const cartReducer = (state, action) => {
       return {
         ...initialState,
         isLoading: false,
+        orders: state.orders, // Keep orders when clearing cart
+      };
+
+    case 'ADD_ORDER':
+      return {
+        ...state,
+        orders: [action.payload, ...state.orders],
+      };
+
+    case 'LOAD_ORDERS':
+      return {
+        ...state,
+        orders: action.payload,
       };
 
     default:
@@ -137,17 +151,27 @@ export const CartProvider = ({ children }) => {
       } else if (!user) {
         // If user is not logged in, load from localStorage
         const savedCart = localStorage.getItem('cart');
+        const savedOrders = localStorage.getItem('orders');
+        
         if (savedCart) {
           try {
             const parsedCart = JSON.parse(savedCart);
             dispatch({ type: 'LOAD_CART', payload: parsedCart });
           } catch (error) {
             console.error('Failed to parse cart from localStorage:', error);
-            dispatch({ type: 'SET_LOADING', payload: false });
           }
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false });
         }
+        
+        if (savedOrders) {
+          try {
+            const parsedOrders = JSON.parse(savedOrders);
+            dispatch({ type: 'LOAD_ORDERS', payload: parsedOrders });
+          } catch (error) {
+            console.error('Failed to parse orders from localStorage:', error);
+          }
+        }
+        
+        dispatch({ type: 'SET_LOADING', payload: false });
       }
     };
 
@@ -207,8 +231,10 @@ export const CartProvider = ({ children }) => {
         totalItems: state.totalItems,
         totalAmount: state.totalAmount,
       }));
+      
+      localStorage.setItem('orders', JSON.stringify(state.orders));
     }
-  }, [state.items, state.totalItems, state.totalAmount, user, state.isLoading]);
+  }, [state.items, state.totalItems, state.totalAmount, state.orders, user, state.isLoading]);
 
   const addItem = async (item) => {
     if (user) {
@@ -288,6 +314,24 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: 'CLEAR_CART' });
   };
 
+  const placeOrder = async (orderDetails = {}) => {
+    const order = {
+      id: Date.now().toString(),
+      date: new Date().toISOString(),
+      items: [...state.items],
+      totalAmount: state.totalAmount,
+      status: 'pending',
+      ...orderDetails
+    };
+
+    dispatch({ type: 'ADD_ORDER', payload: order });
+    
+    // Clear the cart after placing order
+    await clearCart();
+    
+    return order;
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -296,6 +340,7 @@ export const CartProvider = ({ children }) => {
         updateQuantity,
         removeItem,
         clearCart,
+        placeOrder, // Add placeOrder function to context
       }}
     >
       {children}

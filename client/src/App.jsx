@@ -15,7 +15,7 @@ import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
 import ProfilePage from './pages/ProfilePage';
-import OrderHistoryPage from './pages/OrderHistoryPage'; // Add this import
+import OrderHistoryPage from './pages/OrderHistoryPage';
 import PreferencesForm from './components/ui/PreferencesForm';
 
 // Context Providers
@@ -76,7 +76,7 @@ function App() {
               } 
             />
             <Route 
-              path="order-history"  // Add this route
+              path="orderhistory"  // Changed from "order-history" to "orderhistory"
               element={
                 <>
                   <SignedIn>

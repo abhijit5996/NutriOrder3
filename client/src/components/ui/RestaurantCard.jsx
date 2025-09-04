@@ -75,7 +75,7 @@ const RestaurantCard = ({ restaurant }) => {
         </div>
         
         <Link 
-          to={`/restaurant/${restaurant.id}`}
+          to={`/restaurants/${restaurant.id}`}
           className="btn btn-primary w-full"
         >
           View Menu

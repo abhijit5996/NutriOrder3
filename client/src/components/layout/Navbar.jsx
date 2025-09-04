@@ -147,6 +147,14 @@ const Navbar = ({ cartItems = [] }) => {
                           Profile
                         </Link>
                         
+                        <Link
+                          to="/orderhistory"
+                          className="block px-4 py-2 text-sm text-[#94A3B8] hover:bg-[#334155] hover:text-white"
+                          onClick={() => setIsProfileDropdownOpen(false)}
+                        >
+                          Order History
+                        </Link>
+                        
                         <div className="border-t border-[#334155] my-1"></div>
                         <button
                           onClick={handleManageAccount}
@@ -194,8 +202,36 @@ const Navbar = ({ cartItems = [] }) => {
             )}
           </div>
           
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          {/* Mobile Menu Button and Profile Picture */}
+          <div className="md:hidden flex items-center">
+            {/* Profile Picture for Mobile */}
+            {isSignedIn ? (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                className="flex items-center justify-center w-8 h-8 rounded-full border-2 border-[#38BDF8] overflow-hidden mr-2"
+              >
+                <img 
+                  src={user.imageUrl} 
+                  alt="Profile" 
+                  className="w-full h-full object-cover"
+                />
+              </motion.button>
+            ) : (
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                className="flex items-center justify-center w-8 h-8 rounded-full border-2 border-[#334155] overflow-hidden mr-2 bg-[#1E293B]"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#94A3B8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </motion.button>
+            )}
+            
+            {/* Mobile Menu Button */}
             <motion.button 
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -210,6 +246,72 @@ const Navbar = ({ cartItems = [] }) => {
                 )}
               </svg>
             </motion.button>
+            
+            {/* Mobile Profile Dropdown */}
+            <AnimatePresence>
+              {isProfileDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute top-full right-0 mt-2 w-48 bg-[#1E293B] border border-[#334155] rounded-md shadow-lg py-1 z-50 md:hidden"
+                >
+                  {isSignedIn ? (
+                    <>
+                      <Link
+                        to="/profile"
+                        className="block px-4 py-2 text-sm text-[#94A3B8] hover:bg-[#334155] hover:text-white"
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                      >
+                        Profile
+                      </Link>
+                      
+                      <Link
+                        to="/orderhistory"
+                        className="block px-4 py-2 text-sm text-[#94A3B8] hover:bg-[#334155] hover:text-white"
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                      >
+                        Order History
+                      </Link>
+                      
+                      <div className="border-t border-[#334155] my-1"></div>
+                      <button
+                        onClick={handleManageAccount}
+                        className="block w-full text-left px-4 py-2 text-sm text-[#94A3B8] hover:bg-[#334155] hover:text-white"
+                      >
+                        Manage Account
+                      </button>
+                      <button
+                        onClick={handleSignOut}
+                        className="block w-full text-left px-4 py-2 text-sm text-[#94A3B8] hover:bg-[#334155] hover:text-white"
+                      >
+                        Sign Out
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <SignInButton mode="modal">
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm text-[#94A3B8] hover:bg-[#334155] hover:text-white"
+                          onClick={() => setIsProfileDropdownOpen(false)}
+                        >
+                          Login
+                        </button>
+                      </SignInButton>
+                      <SignUpButton mode="modal">
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm text-[#94A3B8] hover:bg-[#334155] hover:text-white"
+                          onClick={() => setIsProfileDropdownOpen(false)}
+                        >
+                          Sign Up
+                        </button>
+                      </SignUpButton>
+                    </>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
         
@@ -248,7 +350,13 @@ const Navbar = ({ cartItems = [] }) => {
                     >
                       Profile
                     </Link>
-                  
+                    <Link 
+                      to="/orderhistory"
+                      className="px-4 py-2.5 text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0F172A] transition-colors duration-200"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Order History
+                    </Link>
                     <button
                       onClick={handleManageAccount}
                       className="px-4 py-2.5 text-left text-[#94A3B8] hover:text-[#38BDF8] hover:bg-[#0F172A] transition-colors duration-200"

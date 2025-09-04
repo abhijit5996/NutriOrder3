@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
 import { useCart } from '../context/CartContext';
-import FoodCard from '../components/ui/FoodCard';
+import RecipeCard from '../components/RecipeCard';
 import RestaurantCard from '../components/ui/RestaurantCard';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
@@ -326,7 +326,7 @@ const HomePage = () => {
             >
               {featuredFoods.map(food => (
                 <motion.div key={food.id} variants={itemVariants}>
-                  <FoodCard 
+                  <RecipeCard 
                     food={food} 
                     onAddToCart={handleAddToCart} 
                   />

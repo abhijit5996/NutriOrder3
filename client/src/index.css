@@ -241,3 +241,41 @@ input:focus-visible {
     padding-bottom: 6rem;
   }
 }
+/* Ensure proper positioning for the mobile profile dropdown */
+@media (max-width: 767px) {
+  .md\\:hidden .relative {
+    position: relative;
+  }
+  
+  .md\\:hidden .absolute {
+    position: absolute;
+    right: 0;
+    top: 100%;
+  }
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 767px) {
+  .container-custom {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+/* Mobile filter animation */
+@media (max-width: 1023px) {
+  .filter-panel {
+    transition: all 0.3s ease;
+  }
+  
+  /* Ensure the filter panel doesn't overlap with restaurant cards */
+  .container-custom {
+    position: relative;
+  }
+}
+
+/* Ensure proper spacing on mobile */
+@media (max-width: 1023px) {
+  .card {
+    margin-bottom: 1rem;
+  }
+}

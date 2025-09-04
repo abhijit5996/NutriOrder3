@@ -2,14 +2,21 @@ import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useUser } from '@clerk/clerk-react';
+import { useCart } from '../context/CartContext';
 
 const OrderSuccessPage = () => {
   const { user } = useUser();
   const location = useLocation();
   const order = location.state?.order;
+  const { placeOrder } = useCart();
   
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    // If we have order details from checkout, place the order
+    if (order && !order.id) {
+      placeOrder(order);
+    }
   }, []);
 
   return (
