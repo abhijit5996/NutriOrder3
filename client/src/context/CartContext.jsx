@@ -116,7 +116,12 @@ export const CartProvider = ({ children }) => {
       if (isLoaded && user) {
         try {
           dispatch({ type: 'SET_LOADING', payload: true });
-          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/cart/${user.id}`);
+          const response = await fetch(`/api/cart/${user.id}`, {
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
           
           if (response.ok) {
             const cartData = await response.json();
@@ -155,13 +160,19 @@ export const CartProvider = ({ children }) => {
       if (user && !state.isLoading) {
         try {
           // First check if cart exists
-          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/cart/${user.id}`);
+          const response = await fetch(`/api/cart/${user.id}`, {
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
           
           if (!response.ok) {
             // If cart doesn't exist, sync all items individually
             for (const item of state.items) {
-              await fetch(`${import.meta.env.VITE_API_URL}/api/cart/${user.id}`, {
+              await fetch(`/api/cart/${user.id}`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                   'Content-Type': 'application/json',
                 },
@@ -202,8 +213,9 @@ export const CartProvider = ({ children }) => {
   const addItem = async (item) => {
     if (user) {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/cart/${user.id}`, {
+        const response = await fetch(`/api/cart/${user.id}`, {
           method: 'POST',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -259,8 +271,12 @@ export const CartProvider = ({ children }) => {
   const clearCart = async () => {
     if (user) {
       try {
-        await fetch(`${import.meta.env.VITE_API_URL}/api/cart/${user.id}`, {
+        await fetch(`/api/cart/${user.id}`, {
           method: 'DELETE',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          }
         });
       } catch (error) {
         console.error('Error clearing cart from backend:', error);
