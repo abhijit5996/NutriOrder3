@@ -299,14 +299,7 @@ const Navbar = ({ cartItems = [] }) => {
                           Login
                         </button>
                       </SignInButton>
-                      <SignUpButton mode="modal">
-                        <button
-                          className="block w-full text-left px-4 py-2 text-sm text-[#94A3B8] hover:bg-[#334155] hover:text-white"
-                          onClick={() => setIsProfileDropdownOpen(false)}
-                        >
-                          Sign Up
-                        </button>
-                      </SignUpButton>
+                     
                     </>
                   )}
                 </motion.div>
