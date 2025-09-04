@@ -189,15 +189,7 @@ const Navbar = ({ cartItems = [] }) => {
                     Login
                   </motion.button>
                 </SignInButton>
-                <SignUpButton mode="modal">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="btn bg-gradient-to-r from-[#38BDF8] to-[#F43F5E] text-white text-sm px-4 py-1.5"
-                  >
-                    Sign Up
-                  </motion.button>
-                </SignUpButton>
+                
               </div>
             )}
           </div>
