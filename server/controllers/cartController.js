@@ -4,10 +4,16 @@ import Cart from '../models/cart.js';
 export const getCart = async (req, res) => {
   try {
     const { clerkUserId } = req.params;
+    
+    if (!clerkUserId) {
+      return res.status(400).json({ message: 'User ID is required' });
+    }
 
+    console.log('Fetching cart for user:', clerkUserId);
     let cart = await Cart.findOne({ clerkUserId });
 
     if (!cart) {
+      console.log('Creating new cart for user:', clerkUserId);
       // Create empty cart if it doesn't exist
       cart = new Cart({
         clerkUserId,
@@ -21,7 +27,12 @@ export const getCart = async (req, res) => {
     res.status(200).json(cart);
   } catch (error) {
     console.error('Error getting cart:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    console.error('Stack trace:', error.stack);
+    res.status(500).json({ 
+      message: 'Server error while processing cart request', 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 };
 

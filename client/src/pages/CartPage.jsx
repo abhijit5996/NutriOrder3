@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
 import { useCart } from '../context/CartContext';
 import { toast } from 'react-hot-toast';
+import { endpoints, apiRequest } from '../config/api';
 
 import CartItem from '../components/ui/CartItem';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -103,30 +104,18 @@ const CartPage = () => {
         return;
       }
 
-      const response = await fetch(`/api/orders/${user.id}`, {
+      const orderData = await apiRequest(endpoints.orders.create(user.id), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({
-          items: items,
           deliveryInfo,
           paymentMethod,
-          totalAmount,
         }),
-        credentials: 'include',  // Important for CORS
+        credentials: 'include',
       });
       
-      if (response.ok) {
-        const orderData = await response.json();
-        await clearCart();  // Wait for cart to clear
-        toast.success('Order placed successfully!');
-        navigate('/order-success', { state: { order: orderData.order } });
-      } else {
-        const errorData = await response.json();
-        console.error('Failed to place order:', errorData);
-        toast.error(errorData.message || 'Failed to place order. Please try again.');
-      }
+      await clearCart();  // Wait for cart to clear
+      toast.success('Order placed successfully!');
+      navigate('/order-success', { state: { order: orderData.order } });
     } catch (error) {
       console.error('Error placing order:', error);
       toast.error('An error occurred while placing your order. Please check your internet connection and try again.');

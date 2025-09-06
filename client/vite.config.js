@@ -8,10 +8,14 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://nutriorder3.onrender.com',
+        target: process.env.VITE_API_URL || 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
       }
     }
+  },
+  define: {
+    // Make environment variables available at build time
+    'process.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL),
   }
 })

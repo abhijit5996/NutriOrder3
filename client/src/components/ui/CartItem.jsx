@@ -45,7 +45,7 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
         <div className="flex justify-between">
           <div>
             <h3 className="text-base font-medium text-white">{item.name}</h3>
-            <p className="mt-1 text-sm text-gray-400">{item.restaurant}</p>
+            <p className="mt-1 text-sm text-gray-400">{item.restaurantName}</p>
           </div>
           <p className="text-base font-medium text-primary">₹{item.price}</p>
         </div>

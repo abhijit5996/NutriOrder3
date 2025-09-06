@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { endpoints, apiRequest } from '../config/api';
 
 const OrderHistoryPage = () => {
   const { user } = useUser();
@@ -17,14 +18,11 @@ const OrderHistoryPage = () => {
           setIsLoading(true);
           setError(null);
           
-          const response = await fetch(`http://localhost:5000/api/orders/${user.id}`);
+          const ordersData = await apiRequest(endpoints.orders.getHistory(user.id), {
+            credentials: 'include',
+          });
           
-          if (response.ok) {
-            const ordersData = await response.json();
-            setOrders(ordersData);
-          } else {
-            throw new Error('Failed to fetch order history');
-          }
+          setOrders(ordersData);
         } catch (err) {
           console.error('Error fetching order history:', err);
           setError(err.message);

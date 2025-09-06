@@ -1,6 +1,7 @@
 import { createContext, useContext, useReducer, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { useUser } from '@clerk/clerk-react';
+import { endpoints, apiRequest } from '../config/api';
 
 const CartContext = createContext();
 
@@ -130,20 +131,10 @@ export const CartProvider = ({ children }) => {
       if (isLoaded && user) {
         try {
           dispatch({ type: 'SET_LOADING', payload: true });
-          const response = await fetch(`/api/cart/${user.id}`, {
+          const cartData = await apiRequest(endpoints.cart.get(user.id), {
             credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json'
-            }
           });
-          
-          if (response.ok) {
-            const cartData = await response.json();
-            dispatch({ type: 'LOAD_CART', payload: cartData });
-          } else {
-            console.error('Failed to load cart from backend');
-            dispatch({ type: 'SET_LOADING', payload: false });
-          }
+          dispatch({ type: 'LOAD_CART', payload: cartData });
         } catch (error) {
           console.error('Error loading cart from backend:', error);
           dispatch({ type: 'SET_LOADING', payload: false });
@@ -184,22 +175,16 @@ export const CartProvider = ({ children }) => {
       if (user && !state.isLoading) {
         try {
           // First check if cart exists
-          const response = await fetch(`/api/cart/${user.id}`, {
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          });
-          
-          if (!response.ok) {
+          try {
+            await apiRequest(endpoints.cart.get(user.id), {
+              credentials: 'include',
+            });
+          } catch (error) {
             // If cart doesn't exist, sync all items individually
             for (const item of state.items) {
-              await fetch(`/api/cart/${user.id}`, {
+              await apiRequest(endpoints.cart.add(user.id), {
                 method: 'POST',
                 credentials: 'include',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
                 body: JSON.stringify({
                   id: item.id,
                   name: item.name,
@@ -239,12 +224,9 @@ export const CartProvider = ({ children }) => {
   const addItem = async (item) => {
     if (user) {
       try {
-        const response = await fetch(`/api/cart/${user.id}`, {
+        await apiRequest(endpoints.cart.add(user.id), {
           method: 'POST',
           credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
           body: JSON.stringify({
             id: item.id,
             name: item.name,
@@ -256,22 +238,14 @@ export const CartProvider = ({ children }) => {
           }),
         });
 
-        if (response.ok) {
-          dispatch({ type: 'ADD_ITEM', payload: item });
-          toast.success(`${item.name} added to cart successfully!`, {
-            duration: 3000,
-            position: 'top-right',
-          });
-        } else {
-          const errorData = await response.json();
-          toast.error(errorData.message || 'Failed to add item to cart', {
-            duration: 3000,
-            position: 'top-right',
-          });
-        }
+        dispatch({ type: 'ADD_ITEM', payload: item });
+        toast.success(`${item.name} added to cart successfully!`, {
+          duration: 3000,
+          position: 'top-right',
+        });
       } catch (error) {
         console.error('Error adding item to cart:', error);
-        toast.error('Failed to add item to cart', {
+        toast.error(error.message || 'Failed to add item to cart', {
           duration: 3000,
           position: 'top-right',
         });
@@ -297,12 +271,9 @@ export const CartProvider = ({ children }) => {
   const clearCart = async () => {
     if (user) {
       try {
-        await fetch(`/api/cart/${user.id}`, {
+        await apiRequest(endpoints.cart.clear(user.id), {
           method: 'DELETE',
           credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json'
-          }
         });
       } catch (error) {
         console.error('Error clearing cart from backend:', error);
