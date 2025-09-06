@@ -3,15 +3,21 @@ import { motion } from 'framer-motion';
 import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
 
-const RecipeCard = ({ food, onAddToCart }) => {
+const RecipeCard = ({ food, showRestaurant }) => {
   const { addItem } = useCart();
   
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    addItem(food);
-    toast.success(`${food.name} added to cart!`);
-    if (onAddToCart) onAddToCart(food);
+    
+    // Add quantity field if missing
+    const itemToAdd = {
+      ...food,
+      quantity: 1 // Default quantity
+    };
+    
+    addItem(itemToAdd);
+    // Don't call onAddToCart to avoid duplicate calls
   };
 
   // Create a URL-friendly slug from the food name

@@ -418,10 +418,7 @@ const FoodsPage = () => {
     fetchFoods();
   }, []);
 
-  const handleAddToCart = (item) => {
-    addItem(item);
-    toast.success(`${item.name} added to the cart successfully!`);
-  };
+  // Removed duplicate handleAddToCart function
 
   const filteredFoods = filter === 'all' 
     ? foods 
@@ -511,8 +508,7 @@ const FoodsPage = () => {
             {filteredFoods.map(food => (
               <motion.div key={food.id} variants={itemVariants}>
                 <RecipeCard 
-                  food={food} 
-                  onAddToCart={handleAddToCart} 
+                  food={food}
                   showRestaurant={true}
                 />
               </motion.div>

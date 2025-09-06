@@ -17,7 +17,9 @@ const orderItemSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  image: String
+  image: String,
+  restaurantId: String,
+  restaurantName: String
 });
 
 const orderSchema = new mongoose.Schema({
@@ -50,6 +52,7 @@ const orderSchema = new mongoose.Schema({
     name: String,
     phone: String,
     address: String,
+    landmark: String,
     deliveryInstructions: String
   },
   paymentMethod: {

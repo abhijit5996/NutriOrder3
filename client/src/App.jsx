@@ -17,6 +17,7 @@ import AboutPage from './pages/AboutPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
 import ProfilePage from './pages/ProfilePage';
 import OrderHistoryPage from './pages/OrderHistoryPage';
+import OrderDetailsPage from './pages/OrderDetailsPage';
 import PreferencesForm from './components/ui/PreferencesForm';
 
 // Context Providers
@@ -83,6 +84,19 @@ function App() {
                 <>
                   <SignedIn>
                     <OrderHistoryPage />
+                  </SignedIn>
+                  <SignedOut>
+                    <RedirectToSignIn />
+                  </SignedOut>
+                </>
+              } 
+            />
+            <Route 
+              path="order/:orderId"
+              element={
+                <>
+                  <SignedIn>
+                    <OrderDetailsPage />
                   </SignedIn>
                   <SignedOut>
                     <RedirectToSignIn />

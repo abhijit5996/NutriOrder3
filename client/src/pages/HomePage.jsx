@@ -538,10 +538,7 @@ const HomePage = () => {
     fetchData();
   }, [preferences]);
   
-  const handleAddToCart = (item) => {
-    addItem(item);
-    toast.success(`${item.name} added to the cart successfully!`);
-  };
+  // Removed duplicate handleAddToCart function
   
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -623,8 +620,7 @@ const HomePage = () => {
               {featuredFoods.slice(0, 6).map(food => (
                 <motion.div key={food.id} variants={itemVariants}>
                   <RecipeCard 
-                    food={food} 
-                    onAddToCart={handleAddToCart} 
+                    food={food}
                   />
                 </motion.div>
               ))}
