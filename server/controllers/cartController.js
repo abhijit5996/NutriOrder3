@@ -42,6 +42,23 @@ export const addToCart = async (req, res) => {
     const { clerkUserId } = req.params;
     const item = req.body;
 
+    // Validate required fields
+    if (!item.id || !item.name || !item.price || !item.quantity) {
+      return res.status(400).json({ 
+        message: 'Missing required fields: id, name, price, and quantity are required' 
+      });
+    }
+
+    // Ensure numeric values are valid
+    const price = parseFloat(item.price);
+    const quantity = parseInt(item.quantity);
+
+    if (isNaN(price) || isNaN(quantity) || price < 0 || quantity < 1) {
+      return res.status(400).json({ 
+        message: 'Invalid price or quantity values' 
+      });
+    }
+
     let cart = await Cart.findOne({ clerkUserId });
 
     if (!cart) {
@@ -61,15 +78,31 @@ export const addToCart = async (req, res) => {
 
     if (existingItemIndex > -1) {
       // Update quantity if item exists
-      cart.items[existingItemIndex].quantity += item.quantity;
+      cart.items[existingItemIndex].quantity += quantity;
     } else {
-      // Add new item
-      cart.items.push(item);
+      // Add new item with validated values
+      cart.items.push({
+        id: item.id,
+        name: item.name,
+        price: price,
+        quantity: quantity,
+        image: item.image || '',
+        restaurantId: item.restaurantId || '',
+        restaurantName: item.restaurantName || ''
+      });
     }
 
-    // Recalculate totals
-    cart.totalItems = cart.items.reduce((total, item) => total + item.quantity, 0);
-    cart.totalAmount = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+    // Recalculate totals with proper validation
+    cart.totalItems = cart.items.reduce((total, cartItem) => {
+      const itemQuantity = parseInt(cartItem.quantity) || 0;
+      return total + itemQuantity;
+    }, 0);
+
+    cart.totalAmount = cart.items.reduce((total, cartItem) => {
+      const itemPrice = parseFloat(cartItem.price) || 0;
+      const itemQuantity = parseInt(cartItem.quantity) || 0;
+      return total + (itemPrice * itemQuantity);
+    }, 0);
 
     await cart.save();
     res.status(200).json(cart);
@@ -85,6 +118,12 @@ export const updateCartItem = async (req, res) => {
     const { clerkUserId, itemId } = req.params;
     const { quantity } = req.body;
 
+    // Validate quantity
+    const newQuantity = parseInt(quantity);
+    if (isNaN(newQuantity) || newQuantity < 1) {
+      return res.status(400).json({ message: 'Invalid quantity value' });
+    }
+
     const cart = await Cart.findOne({ clerkUserId });
 
     if (!cart) {
@@ -98,12 +137,19 @@ export const updateCartItem = async (req, res) => {
     }
 
     // Update quantity
-    const quantityDifference = quantity - cart.items[itemIndex].quantity;
-    cart.items[itemIndex].quantity = quantity;
+    cart.items[itemIndex].quantity = newQuantity;
 
-    // Recalculate totals
-    cart.totalItems += quantityDifference;
-    cart.totalAmount += (cart.items[itemIndex].price * quantityDifference);
+    // Recalculate totals properly
+    cart.totalItems = cart.items.reduce((total, cartItem) => {
+      const itemQuantity = parseInt(cartItem.quantity) || 0;
+      return total + itemQuantity;
+    }, 0);
+
+    cart.totalAmount = cart.items.reduce((total, cartItem) => {
+      const itemPrice = parseFloat(cartItem.price) || 0;
+      const itemQuantity = parseInt(cartItem.quantity) || 0;
+      return total + (itemPrice * itemQuantity);
+    }, 0);
 
     await cart.save();
     res.status(200).json(cart);
@@ -130,11 +176,20 @@ export const removeFromCart = async (req, res) => {
       return res.status(404).json({ message: 'Item not found in cart' });
     }
 
-    // Remove item and update totals
-    const removedItem = cart.items[itemIndex];
+    // Remove item
     cart.items.splice(itemIndex, 1);
-    cart.totalItems -= removedItem.quantity;
-    cart.totalAmount -= (removedItem.price * removedItem.quantity);
+
+    // Recalculate totals properly
+    cart.totalItems = cart.items.reduce((total, cartItem) => {
+      const itemQuantity = parseInt(cartItem.quantity) || 0;
+      return total + itemQuantity;
+    }, 0);
+
+    cart.totalAmount = cart.items.reduce((total, cartItem) => {
+      const itemPrice = parseFloat(cartItem.price) || 0;
+      const itemQuantity = parseInt(cartItem.quantity) || 0;
+      return total + (itemPrice * itemQuantity);
+    }, 0);
 
     await cart.save();
     res.status(200).json(cart);

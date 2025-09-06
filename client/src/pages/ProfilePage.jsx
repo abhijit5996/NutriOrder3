@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useUser } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 const ProfilePage = () => {
   const { user } = useUser();
+  const navigate = useNavigate();
   const [preferences, setPreferences] = useState(null);
   const [orders, setOrders] = useState([]);
   const [activeTab, setActiveTab] = useState('preferences');
@@ -252,10 +254,7 @@ const ProfilePage = () => {
                            order.paymentMethod === 'card' ? 'Credit/Debit Card' : 'UPI'}
                         </span>
                         <button 
-                          onClick={() => {
-                            // In a real app, this would navigate to order details
-                            console.log('View order details:', order._id);
-                          }}
+                          onClick={() => navigate(`/order/${order._id}`)}
                           className="text-primary hover:text-primary/80 text-sm font-medium"
                         >
                           View Details

@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { endpoints, apiRequest } from '../config/api';
 
 const OrderHistoryPage = () => {
   const { user } = useUser();
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -241,10 +242,7 @@ const OrderHistoryPage = () => {
                     </div>
                     
                     <button 
-                      onClick={() => {
-                        // In a real app, this would navigate to order details or show a modal
-                        console.log('View order details:', order._id);
-                      }}
+                      onClick={() => navigate(`/order/${order._id}`)}
                       className="text-primary hover:text-primary/80 text-sm font-medium flex items-center"
                     >
                       View Details
