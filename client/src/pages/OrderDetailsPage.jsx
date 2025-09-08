@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
 import { motion } from 'framer-motion';
 import { apiRequest, endpoints } from '../config/api';
+import { generateInvoice } from '../utils/invoiceGenerator';
 
 const OrderDetailsPage = () => {
   const { orderId } = useParams();
@@ -30,6 +31,43 @@ const OrderDetailsPage = () => {
 
     fetchOrderDetails();
   }, [user, orderId]);
+
+  // Function to handle invoice download
+  const handleDownloadInvoice = () => {
+    console.log('Download invoice button clicked');
+    
+    if (!order) {
+      console.error('No order data available');
+      return;
+    }
+    
+    console.log('Order data:', order);
+    
+    // Format the order data to match the expected structure for invoice generation
+    const invoiceData = {
+      id: order.id || order.orderNumber,
+      date: order.createdAt,
+      customer: {
+        name: order.deliveryInfo.name,
+        phone: order.deliveryInfo.phone,
+        address: order.deliveryInfo.address,
+      },
+      items: order.items.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      // Corrected field mapping with fallback values
+      subtotal: order.totalAmount || 0,
+      tax: order.tax || 0,
+      deliveryFee: order.deliveryFee || 0,
+      total: order.finalAmount || 0,
+    };
+    
+    console.log('Invoice data:', invoiceData);
+    
+    generateInvoice(invoiceData);
+  };
 
   if (isLoading) {
     return (
@@ -117,15 +155,29 @@ const OrderDetailsPage = () => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-8"
           >
-            <button 
-              onClick={() => navigate('/profile')}
-              className="text-primary hover:text-primary/80 mb-4 flex items-center"
-            >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Back to Profile
-            </button>
+            <div className="flex justify-between items-start mb-4">
+              <button 
+                onClick={() => navigate('/profile')}
+                className="text-primary hover:text-primary/80 flex items-center"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to Profile
+              </button>
+              
+              {/* Download Invoice Button */}
+              <button 
+                onClick={handleDownloadInvoice}
+                className="btn btn-primary flex items-center"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Download Invoice
+              </button>
+            </div>
+            
             <h1 className="text-3xl font-bold text-white mb-2">Order Details</h1>
             <p className="text-gray-400">Order #{order.orderNumber}</p>
           </motion.div>
